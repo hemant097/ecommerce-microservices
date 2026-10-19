@@ -32,4 +32,19 @@ public class UserServiceImpl implements UserService {
                 .findFirst()
                 ;
     }
+
+    @Override
+    public boolean updateInfo(Long id, User updatedUser) {
+
+        userList.stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst()
+                .map(existingUser -> {
+                    existingUser.setFirstName(updatedUser.getFirstName());
+                    existingUser.setLastName(updatedUser.getLastName());
+                    return true;
+                })
+                .orElse(false)
+        ;
+    }
 }
