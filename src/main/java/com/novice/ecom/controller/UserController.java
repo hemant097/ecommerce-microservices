@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,14 +21,24 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{id}")
-    public ResponseEntity<User> getAllUsers(@PathVariable Long id){
-        return new ResponseEntity<>(userService.fetchUser(id), HttpStatus.CREATED);
+    public ResponseEntity<User> getUser(@PathVariable Long id){
+
+//        User user = userService.fetchUser(id);
+//
+//        if(user==null)
+//            return ResponseEntity.notFound().build();
+//
+//        return new ResponseEntity<>(user, HttpStatus.OK);
+
+        return userService.fetchUser(id)
+                .map(user -> ResponseEntity.ok(user))
+                .orElseGet(()-> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/api/users")
-    public String createUser(@RequestBody User user){
+    public ResponseEntity<String> createUser(@RequestBody User user){
         userService.createNewUser(user);
-        return "new User added successfully";
+        return new ResponseEntity<>("new User added successfully", HttpStatus.CREATED);
     }
 
 }

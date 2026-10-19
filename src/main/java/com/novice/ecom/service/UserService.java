@@ -3,6 +3,7 @@ package com.novice.ecom.service;
 import com.novice.ecom.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -10,5 +11,5 @@ public interface UserService {
 
     void createNewUser(User user);
 
-    User fetchUser(Long id);
+    Optional<User> fetchUser(Long id);
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,11 +25,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User fetchUser(Long id) {
-        for(User u: userList){
-            if(u.getId().equals(id))
-                return u;
-        }
-        return null;
+    public Optional<User> fetchUser(Long id) {
+
+        return userList.stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst()
+                ;
     }
 }
