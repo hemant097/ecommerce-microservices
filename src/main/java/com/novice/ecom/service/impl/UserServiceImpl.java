@@ -36,15 +36,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateInfo(Long id, User updatedUser) {
 
-        userList.stream()
+        return userList.stream()
                 .filter(user -> user.getId().equals(id))
                 .findFirst()
                 .map(existingUser -> {
                     existingUser.setFirstName(updatedUser.getFirstName());
                     existingUser.setLastName(updatedUser.getLastName());
+                    existingUser.setEmail(updatedUser.getEmail());
                     return true;
                 })
-                .orElse(false)
-        ;
+                .orElse( false)
+                ;
     }
 }
