@@ -29,8 +29,7 @@ public class UserServiceImpl implements UserService {
 
         return userList.stream()
                 .filter(user -> user.getId().equals(id))
-                .findFirst()
-                ;
+                .findFirst();
     }
 
     @Override
