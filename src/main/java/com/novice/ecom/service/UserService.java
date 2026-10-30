@@ -15,4 +15,6 @@ public interface UserService {
     Optional<User> fetchUser(Long id);
 
     boolean updateInfo(Long id, User updatedUser);
+
+    boolean deleteUser(Long id);
 }
