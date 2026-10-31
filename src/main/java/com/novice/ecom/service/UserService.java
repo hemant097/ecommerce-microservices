@@ -1,5 +1,6 @@
 package com.novice.ecom.service;
 
+import com.novice.ecom.dto.UserResponse;
 import com.novice.ecom.entity.User;
 
 import java.net.http.HttpHeaders;
@@ -8,11 +9,11 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<User> fetchAllUsers();
+    List<UserResponse> fetchAllUsers();
 
     void createNewUser(User user);
 
-    Optional<User> fetchUser(Long id);
+    UserResponse fetchUser(Long id);
 
     boolean updateInfo(Long id, User updatedUser);
 

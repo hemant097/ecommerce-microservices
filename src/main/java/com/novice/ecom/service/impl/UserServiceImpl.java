@@ -1,5 +1,7 @@
 package com.novice.ecom.service.impl;
 
+import com.novice.ecom.dto.AddressDto;
+import com.novice.ecom.dto.UserResponse;
 import com.novice.ecom.entity.User;
 import com.novice.ecom.repo.UserRepo;
 import com.novice.ecom.service.UserService;
@@ -22,10 +24,12 @@ public class UserServiceImpl implements UserService {
 //    private long userId = 1;
 
     @Override
-    public List<User> fetchAllUsers() {
+    public List<UserResponse> fetchAllUsers() {
 //        return userList;
 
-        return userRepo.findAll();
+        return userRepo.findAll().stream()
+                .map(user -> mapToUserResponse(user))
+                .toList();
     }
 
     @Override
@@ -37,13 +41,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> fetchUser(Long id) {
+    public UserResponse fetchUser(Long id) {
 
 //        return userList.stream()
 //                .filter(user -> user.getId().equals(id))
 //                .findFirst();
 
-        return userRepo.findById(id);
+        return mapToUserResponse(userRepo.findById(id).orElseThrow());
     }
 
     @Override
@@ -82,5 +86,25 @@ public class UserServiceImpl implements UserService {
         }
         else
             return false;
+    }
+
+    private UserResponse mapToUserResponse(User user){
+        UserResponse userResponse =  new UserResponse();
+
+        AddressDto addressResponse = new AddressDto(user.getAddress().getStreet(),
+                user.getAddress().getCity(),
+                user.getAddress().getState(),
+                user.getAddress().getCountry(),
+                user.getAddress().getZipcode());
+
+        userResponse.setId(user.getId());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setMobileNumber(user.getMobileNumber());
+        userResponse.setUserRole(user.getUserRole());
+        userResponse.setAddress(addressResponse);
+
+        return userResponse;
     }
 }
