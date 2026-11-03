@@ -1,7 +1,9 @@
 package com.novice.ecom.service.impl;
 
 import com.novice.ecom.dto.AddressDto;
+import com.novice.ecom.dto.UserRequest;
 import com.novice.ecom.dto.UserResponse;
+import com.novice.ecom.entity.Address;
 import com.novice.ecom.entity.User;
 import com.novice.ecom.repo.UserRepo;
 import com.novice.ecom.service.UserService;
@@ -33,25 +35,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createNewUser(User user) {
+    public void createNewUser(UserRequest userRequest) {
 //        user.setId(userId++);
 //        userList.add(user);
 
+        User user = new User();
+        updateUserFromRequest(userRequest, user);
         userRepo.save(user);
     }
 
     @Override
-    public UserResponse fetchUser(Long id) {
+    public Optional<UserResponse> fetchUser(Long id) {
 
 //        return userList.stream()
 //                .filter(user -> user.getId().equals(id))
 //                .findFirst();
 
-        return mapToUserResponse(userRepo.findById(id).orElseThrow());
+        return userRepo.findById(id)
+                .map(this::mapToUserResponse);//Optional.map wraps the return value of mapToUserResponse in an Optional
     }
 
     @Override
-    public boolean updateInfo(Long id, User updatedUser) {
+    public boolean updateInfo(Long id, UserRequest updatedUser) {
         log.info("Updating the user with id {}",id);
 
 //        return userList.stream()
@@ -67,9 +72,7 @@ public class UserServiceImpl implements UserService {
 
         return userRepo.findById(id)
                 .map( existingUser -> {
-                    existingUser.setFirstName(updatedUser.getFirstName());
-                    existingUser.setLastName(updatedUser.getLastName());
-                    existingUser.setEmail(updatedUser.getEmail());
+                    updateUserFromRequest(updatedUser, existingUser);
                     userRepo.save(existingUser);
                     return true;
                 })
@@ -104,9 +107,27 @@ public class UserServiceImpl implements UserService {
                     user.getAddress().getState(),
                     user.getAddress().getCountry(),
                     user.getAddress().getZipcode());
+
             userResponse.setAddress(addressResponse);
         }
 
         return userResponse;
+    }
+
+    private void updateUserFromRequest(UserRequest userRequest, User user){
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setEmail(userRequest.getEmail());
+        user.setMobileNumber(userRequest.getMobileNumber());
+        user.setUserRole(userRequest.getUserRole());
+
+        if(userRequest.getAddress()!=null){
+            Address address = new Address();
+            address.setStreet(user.getAddress().getStreet());
+            address.setCity(user.getAddress().getCity());
+            address.setState(user.getAddress().getState());
+            address.setCountry(user.getAddress().getCountry());
+            address.setZipcode(user.getAddress().getZipcode());
+        }
     }
 }

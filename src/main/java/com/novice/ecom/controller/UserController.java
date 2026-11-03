@@ -1,7 +1,7 @@
 package com.novice.ecom.controller;
 
+import com.novice.ecom.dto.UserRequest;
 import com.novice.ecom.dto.UserResponse;
-import com.novice.ecom.entity.User;
 import com.novice.ecom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,15 +37,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody User user){
+    public ResponseEntity<String> createUser(@RequestBody UserRequest user){
         userService.createNewUser(user);
         return new ResponseEntity<>("new User added successfully", HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateInfo(@PathVariable Long id,
-                                           @RequestBody User updatedUser){
-        boolean updated =  userService.updateInfo(id, updatedUser);
+                                           @RequestBody UserRequest updatedUserRequest){
+        boolean updated =  userService.updateInfo(id, updatedUserRequest);
 
         if(updated)
             return ResponseEntity.ok("User updated successfully");

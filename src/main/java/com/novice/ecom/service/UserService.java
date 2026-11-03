@@ -1,5 +1,6 @@
 package com.novice.ecom.service;
 
+import com.novice.ecom.dto.UserRequest;
 import com.novice.ecom.dto.UserResponse;
 import com.novice.ecom.entity.User;
 
@@ -11,11 +12,11 @@ public interface UserService {
 
     List<UserResponse> fetchAllUsers();
 
-    void createNewUser(User user);
+    void createNewUser(UserRequest user);
 
-    UserResponse fetchUser(Long id);
+    Optional<UserResponse> fetchUser(Long id);
 
-    boolean updateInfo(Long id, User updatedUser);
+    boolean updateInfo(Long id, UserRequest updatedUser);
 
     boolean deleteUser(Long id);
 }
