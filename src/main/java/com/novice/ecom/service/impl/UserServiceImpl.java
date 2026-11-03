@@ -123,11 +123,13 @@ public class UserServiceImpl implements UserService {
 
         if(userRequest.getAddress()!=null){
             Address address = new Address();
-            address.setStreet(user.getAddress().getStreet());
-            address.setCity(user.getAddress().getCity());
-            address.setState(user.getAddress().getState());
-            address.setCountry(user.getAddress().getCountry());
-            address.setZipcode(user.getAddress().getZipcode());
+            address.setStreet(userRequest.getAddress().street());
+            address.setCity(userRequest.getAddress().city());
+            address.setState(userRequest.getAddress().state());
+            address.setCountry(userRequest.getAddress().country());
+            address.setZipcode(userRequest.getAddress().zipcode());
+
+            user.setAddress(address);
         }
     }
 }
