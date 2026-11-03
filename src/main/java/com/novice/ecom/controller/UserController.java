@@ -1,5 +1,6 @@
 package com.novice.ecom.controller;
 
+import com.novice.ecom.dto.UserResponse;
 import com.novice.ecom.entity.User;
 import com.novice.ecom.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserResponse>> getAllUsers(){
         return ResponseEntity.ok(userService.fetchAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id){
+    public ResponseEntity<UserResponse> getUser(@PathVariable Long id){
 
 //        User user = userService.fetchUser(id);
 //        if(user==null)

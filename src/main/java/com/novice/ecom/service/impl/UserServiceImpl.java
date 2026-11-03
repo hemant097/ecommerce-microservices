@@ -91,19 +91,21 @@ public class UserServiceImpl implements UserService {
     private UserResponse mapToUserResponse(User user){
         UserResponse userResponse =  new UserResponse();
 
-        AddressDto addressResponse = new AddressDto(user.getAddress().getStreet(),
-                user.getAddress().getCity(),
-                user.getAddress().getState(),
-                user.getAddress().getCountry(),
-                user.getAddress().getZipcode());
-
-        userResponse.setId(user.getId());
+        userResponse.setId(String.valueOf(user.getId()));
         userResponse.setFirstName(user.getFirstName());
         userResponse.setLastName(user.getLastName());
         userResponse.setEmail(user.getEmail());
         userResponse.setMobileNumber(user.getMobileNumber());
         userResponse.setUserRole(user.getUserRole());
-        userResponse.setAddress(addressResponse);
+
+        if(user.getAddress() != null){
+            AddressDto addressResponse = new AddressDto(user.getAddress().getStreet(),
+                    user.getAddress().getCity(),
+                    user.getAddress().getState(),
+                    user.getAddress().getCountry(),
+                    user.getAddress().getZipcode());
+            userResponse.setAddress(addressResponse);
+        }
 
         return userResponse;
     }
