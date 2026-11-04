@@ -91,6 +91,7 @@ public class UserServiceImpl implements UserService {
             return false;
     }
 
+    //mapper method
     private UserResponse mapToUserResponse(User user){
         UserResponse userResponse =  new UserResponse();
 
