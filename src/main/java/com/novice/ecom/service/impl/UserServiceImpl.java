@@ -5,13 +5,12 @@ import com.novice.ecom.dto.UserRequest;
 import com.novice.ecom.dto.UserResponse;
 import com.novice.ecom.entity.Address;
 import com.novice.ecom.entity.User;
-import com.novice.ecom.repo.UserRepo;
+import com.novice.ecom.repo.UserRepository;
 import com.novice.ecom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private final UserRepo userRepo;
+    private final UserRepository userRepo;
 
 //    List<User> userList = new ArrayList<>();
 //    private long userId = 1;

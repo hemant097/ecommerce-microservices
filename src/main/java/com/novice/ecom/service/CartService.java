@@ -4,4 +4,6 @@ import com.novice.ecom.dto.CartItemRequest;
 
 public interface CartService {
     boolean addToCart(String userId, CartItemRequest cartItemRequest);
+
+    boolean deleteFromCart(String userId, Long productId);
 }

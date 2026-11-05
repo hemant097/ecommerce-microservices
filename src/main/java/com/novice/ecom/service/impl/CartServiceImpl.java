@@ -8,10 +8,9 @@ import com.novice.ecom.repo.CartItemRepository;
 import com.novice.ecom.repo.ProductRepository;
 import com.novice.ecom.repo.UserRepository;
 import com.novice.ecom.service.CartService;
-import com.novice.ecom.service.ProductService;
-import com.novice.ecom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -23,7 +22,6 @@ public class CartServiceImpl implements CartService {
     private final ProductRepository productRepo;
     private final CartItemRepository cartItemRepo;
     private final UserRepository userRepo;
-    private final UserService userService;
 
     @Override
     public boolean addToCart(String userId, CartItemRequest cartItemRequest) {
@@ -61,5 +59,22 @@ public class CartServiceImpl implements CartService {
         }
 
         return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteFromCart(String userId, Long productId) {
+
+        Optional<User> userOpt = userRepo.findById(Long.valueOf(userId));
+        if(userOpt.isEmpty())
+            return false;
+
+        return userOpt.flatMap(user ->
+                productRepo.findById(productId)
+                        .map(product -> {
+                            cartItemRepo.deleteByUserAndProduct(user, product);
+                            return true;
+                        })
+        ).orElse(false);
     }
 }

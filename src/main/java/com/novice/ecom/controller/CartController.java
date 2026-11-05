@@ -20,8 +20,18 @@ public class CartController {
 
         if(!cartService.addToCart(userId,cartItemRequest))
             return ResponseEntity.badRequest()
-                    .body("Product out of stock");
+                    .body("Product out of stock or user/product not found");
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/items/{id}")
+    public ResponseEntity<Void> removeFromCart(@RequestHeader("X-User-ID") String userId,
+                                            @PathVariable(value = "id") Long productId){
+
+        if(!cartService.deleteFromCart(userId,productId))
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
