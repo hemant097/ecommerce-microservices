@@ -8,6 +8,9 @@ import com.novice.ecom.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -21,6 +24,44 @@ public class ProductServiceImpl implements ProductService {
         updateProductFromRequest(product, productRequest);
         Product savedProduct = productRepo.save(product);
         return mapToProductResponse(savedProduct);
+    }
+
+    @Override
+    public List<ProductResponse> getAllProducts() {
+        return productRepo.findByActiveTrue()
+                .stream()
+                .map(this::mapToProductResponse)
+                .toList();
+    }
+
+    @Override
+    public Optional<ProductResponse> updateProduct(Long id, ProductRequest updatedProductReq) {
+        return productRepo.findById(id)
+                .map(existingProduct -> {
+                    updateProductFromRequest(existingProduct,updatedProductReq);
+                    Product savedProduct =  productRepo.save(existingProduct);
+                    return mapToProductResponse(savedProduct);
+                });
+    }
+
+    @Override
+    public boolean deleteProduct(Long id) {
+        return productRepo.findById(id)
+                .map(product -> {
+                    product.setActive(false);
+                    productRepo.save(product);
+                    return true;
+                })
+                .orElse(false);
+
+    }
+
+    @Override
+    public List<ProductResponse> searchProducts(String keyword) {
+
+        return productRepo.findByName(keyword).stream()
+                .map(this::mapToProductResponse)
+                .toList();
     }
 
     private void updateProductFromRequest(Product product, ProductRequest request){
