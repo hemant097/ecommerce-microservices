@@ -96,6 +96,12 @@ public class CartServiceImpl implements CartService {
                 .orElse(List.of());
     }
 
+    @Override
+    public void clearCart(String userId) {
+        userRepo.findById(Long.valueOf(userId))
+                .ifPresent(user -> cartItemRepo.deleteByUser(user));
+    }
+
     private CartItemResponse mapToCartItemResponse(CartItem cartItem){
         CartItemResponse cartItemResponse = new CartItemResponse();
         cartItemResponse.setId(cartItem.getId());
