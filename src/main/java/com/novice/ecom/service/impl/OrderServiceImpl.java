@@ -7,6 +7,8 @@ import com.novice.ecom.entity.Order;
 import com.novice.ecom.entity.OrderItem;
 import com.novice.ecom.entity.User;
 import com.novice.ecom.enums.OrderStatus;
+import com.novice.ecom.exceptions.BadRequestException;
+import com.novice.ecom.exceptions.ResourceNotFoundException;
 import com.novice.ecom.repo.CartItemRepository;
 import com.novice.ecom.repo.OrderRepository;
 import com.novice.ecom.repo.UserRepository;
@@ -32,9 +34,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse createOrder(String userId) {
 
         User user = userRepo.findById(Long.valueOf(userId))
-                .orElseThrow( ()-> new RuntimeException("User does not exist"));
+                .orElseThrow( ()-> new ResourceNotFoundException("User does not exist"));
 
         List<CartItem> cartItems = cartItemRepo.findAllByUser(user);
+        if (cartItems.isEmpty())
+            throw new BadRequestException("cart is empty, add some items first");
 
         BigDecimal totalPrice = cartItems.stream()
                 .map(CartItem::getPrice)
