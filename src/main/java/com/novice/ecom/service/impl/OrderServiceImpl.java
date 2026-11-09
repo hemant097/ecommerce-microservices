@@ -41,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
             throw new BadRequestException("cart is empty, add some items first");
 
         BigDecimal totalPrice = cartItems.stream()
-                .map(CartItem::getPrice)
+                .map(CartItem::getSubTotal)
                 .reduce(BigDecimal.ZERO, (itemTotal,subTotal) -> itemTotal.add(subTotal));
 
         Order order = new Order();
@@ -54,8 +54,9 @@ public class OrderServiceImpl implements OrderService {
                 .map(item -> {
                     OrderItem orderItem = new OrderItem();
                     orderItem.setOrder(order);
+                    orderItem.setUnitPrice(item.getUnitPrice());
                     orderItem.setQuantity(item.getQuantity());
-                    orderItem.setPrice(item.getPrice());
+                    orderItem.setSubTotal(item.getSubTotal());
                     orderItem.setProduct(item.getProduct());
                     return orderItem;
                 }).toList();
@@ -86,8 +87,8 @@ public class OrderServiceImpl implements OrderService {
                 orderItem.getId(),
                 orderItem.getProduct().getId(),
                 orderItem.getQuantity(),
-                orderItem.getPrice(),
-                orderItem.getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())));
+                orderItem.getUnitPrice(),
+                orderItem.getSubTotal());
     }
 
 }

@@ -49,14 +49,15 @@ public class CartServiceImpl implements CartService {
         if(existingCartItem!=null){
             //Quantity,price update
             existingCartItem.setQuantity(existingCartItem.getQuantity() + requestItemQty);
-            existingCartItem.setPrice(product.getPrice().multiply(BigDecimal.valueOf(existingCartItem.getQuantity())));
+            existingCartItem.setSubTotal(product.getPrice().multiply(BigDecimal.valueOf(existingCartItem.getQuantity())));
         }else {
             //new cart item
             CartItem newCartItem = new CartItem();
             newCartItem.setProduct(product);
             newCartItem.setUser(user);
+            newCartItem.setUnitPrice(product.getPrice());
             newCartItem.setQuantity(requestItemQty);
-            newCartItem.setPrice(product.getPrice().multiply(BigDecimal.valueOf(requestItemQty)));
+            newCartItem.setSubTotal(product.getPrice().multiply(BigDecimal.valueOf(requestItemQty)));
 
             cartItemRepo.save(newCartItem);
         }
@@ -105,7 +106,8 @@ public class CartServiceImpl implements CartService {
     private CartItemResponse mapToCartItemResponse(CartItem cartItem){
         CartItemResponse cartItemResponse = new CartItemResponse();
         cartItemResponse.setId(cartItem.getId());
-        cartItemResponse.setPrice(cartItem.getPrice());
+        cartItemResponse.setPrice(cartItem.getUnitPrice());
+        cartItemResponse.setSubTotal(cartItem.getSubTotal());
         cartItemResponse.setProductName(cartItem.getProduct().getName());
         cartItemResponse.setQuantity(cartItem.getQuantity());
         return cartItemResponse;
